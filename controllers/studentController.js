@@ -1,9 +1,22 @@
 const Student = require('../models/student');
+const { uploadFile } = require('../utils/uploadFile');
 
-// Create student
+// Create student with photo upload
 exports.createStudent = async (req, res) => {
     try {
-        const student = new Student(req.body);
+        let photoUrl = '';
+
+        // Upload image if exists
+        if (req.file) {
+            photoUrl = await uploadFile(req.file.buffer);
+        }
+
+        const studentData = {
+            ...req.body,
+            photo: photoUrl
+        };
+
+        const student = new Student(studentData);
         const saved = await student.save();
         res.status(201).json(saved);
     } catch (err) {
@@ -21,7 +34,7 @@ exports.getStudents = async (req, res) => {
     }
 };
 
-// Get single student
+// Get single student by ID
 exports.getStudentById = async (req, res) => {
     try {
         const student = await Student.findById(req.params.id);
@@ -32,10 +45,18 @@ exports.getStudentById = async (req, res) => {
     }
 };
 
-// Update student
+// Update student (optional: photo update)
 exports.updateStudent = async (req, res) => {
     try {
-        const updated = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        let updateData = { ...req.body };
+
+        // If new photo uploaded, update it
+        if (req.file) {
+            const photoUrl = await uploadFile(req.file.buffer);
+            updateData.photo = photoUrl;
+        }
+
+        const updated = await Student.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!updated) return res.status(404).json({ error: 'Student not found' });
         res.json(updated);
     } catch (err) {
