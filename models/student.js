@@ -21,7 +21,9 @@ const studentSchema = new mongoose.Schema({
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
     payment: { type: String, enum: ['Yes', 'No']},
     willTeachersFeeBeTaken: { type: String, enum: ['Yes', 'No']},
-    photo: { type: String }
+    photo: { type: String },
+    amount: { type: Number },
+    paymentMode: { type: String, enum: ['Cash', 'Online'] }
 }, {
     timestamps: true
 });
