@@ -19,8 +19,8 @@ const studentSchema = new mongoose.Schema({
     center: { type: String, required: true },
     age: { type: Number, required: true },
     gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
-    // teachersFeeTaken: { type: String, enum: ['Yes', 'No'], required: true },
-    // willTeachersFeeBeTaken: { type: String, enum: ['Yes', 'No'], required: true },
+    payment: { type: String, enum: ['Yes', 'No']},
+    willTeachersFeeBeTaken: { type: String, enum: ['Yes', 'No']},
     photo: { type: String }
 }, {
     timestamps: true
