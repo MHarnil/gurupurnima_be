@@ -12,36 +12,44 @@ exports.createSamiti = async (req, res) => {
 };
 
 // READ ALL
+// exports.getAllSamitis = async (req, res) => {
+//     try {
+//         const groupedSamitis = await Samiti.aggregate([
+//             {
+//                 $group: {
+//                     _id: "$samiti",
+//                     members: {
+//                         $push: {
+//                             name: "$name",
+//                             number: "$number"
+//                         }
+//                     }
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     _id: 0,
+//                     samiti: "$_id",
+//                     members: 1
+//                 }
+//             },
+//             { $sort: { samiti: 1 } }
+//         ]);
+//
+//         res.json(groupedSamitis);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
 exports.getAllSamitis = async (req, res) => {
     try {
-        const groupedSamitis = await Samiti.aggregate([
-            {
-                $group: {
-                    _id: "$samiti",
-                    members: {
-                        $push: {
-                            name: "$name",
-                            number: "$number"
-                        }
-                    }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    samiti: "$_id",
-                    members: 1
-                }
-            },
-            { $sort: { samiti: 1 } }
-        ]);
+        const groupedSamitis = await Samiti.find();
 
         res.json(groupedSamitis);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
-
 // READ SINGLE
 exports.getSamitiById = async (req, res) => {
     try {
