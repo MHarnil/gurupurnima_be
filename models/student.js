@@ -23,12 +23,13 @@ const studentSchema = new mongoose.Schema({
     willTeachersFeeBeTaken: { type: String, enum: ['Yes', 'No']},
     photo: { type: String },
     amount: { type: Number },
+    donation: { type: Number },
     paymentMode: { type: String, enum: ['Cash', 'Online'] }
 }, {
     timestamps: true
 });
 
-// Auto-increment registerNumber before saving
+
 studentSchema.pre('save', async function (next) {
     if (this.isNew) {
         try {
@@ -37,7 +38,7 @@ studentSchema.pre('save', async function (next) {
                 { $inc: { seq: 1 } },
                 { new: true, upsert: true }
             );
-            this.registerNumber = counter.seq.toString(); // Example: '1', '2', '3', etc.
+            this.registerNumber = counter.seq.toString();
             next();
         } catch (err) {
             next(err);
